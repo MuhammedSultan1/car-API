@@ -1,10 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\V1;
 
-use App\Http\Requests\StoreCarRequest;
-use App\Http\Requests\UpdateCarRequest;
 use App\Models\Car;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreCarRequest;
+use App\Http\Resources\V1\CarResource;
+use App\Http\Requests\UpdateCarRequest;
 
 class CarController extends Controller
 {
@@ -15,7 +17,7 @@ class CarController extends Controller
      */
     public function index()
     {
-        //
+        return CarResource::collection(Car::paginate(20));
     }
 
     /**
@@ -28,7 +30,7 @@ class CarController extends Controller
     {
         $car = Car::create($request->all());
         
-        return $car;
+        return new CarResource($car);
     }
 
     /**
@@ -39,7 +41,7 @@ class CarController extends Controller
      */
     public function show(Car $car)
     {
-        //
+        return new CarResource($car);
     }
 
     /**
@@ -51,7 +53,9 @@ class CarController extends Controller
      */
     public function update(UpdateCarRequest $request, Car $car)
     {
-        //
+        $car->update($request->all());
+
+        return new CarResource($car);
     }
 
     /**
@@ -62,6 +66,8 @@ class CarController extends Controller
      */
     public function destroy(Car $car)
     {
-        //
+        $car->delete();
+
+        return response('', 204);
     }
 }

@@ -25,6 +25,8 @@ class StoreCarRequest extends FormRequest
     {
         return [
             'brand' => 'required',
+            'model' => 'required',
+            'year' => 'required'
         ];
     }
 }
